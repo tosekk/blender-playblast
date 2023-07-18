@@ -35,7 +35,8 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         name="Frame Start",
         description="Playblast frame range start frame number",
         default=1,
-        subtype="UNSIGNED"
+        subtype="UNSIGNED",
+        min=1
     )
     
     frame_end: IntProperty(
@@ -49,7 +50,8 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         name="Current Frame",
         description="Playblast's current frame",
         default=1,
-        subtype="UNSIGNED"
+        subtype="UNSIGNED",
+        min=1
     )
     
     # Strings
