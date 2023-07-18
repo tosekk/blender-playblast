@@ -15,6 +15,12 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         description="Override viewport render location for current playblast",
         default=False
     )
+
+    playblast_exists: BoolProperty(
+        name="Playblast Exists",
+        description="Status that indicates if playblast exists",
+        default=False
+    )
     
     # Integers
     res_x: IntProperty(
@@ -55,11 +61,16 @@ class PlayblastProperties(bpy.types.PropertyGroup):
     )
     
     # Strings
-    render_loc: StringProperty(
-        name="Playblast Output Path",
-        description="Playblast output image path with extension",
-        default="",
-        subtype="FILE_PATH"
+    render_folder: StringProperty(
+        name="Folder Name",
+        description="Playblast output folder",
+        default="playblast"
+    )
+
+    render_filename: StringProperty(
+        name="Filename",
+        description="Playblast output image filename",
+        default="frame"
     )
     
     window_name: StringProperty(

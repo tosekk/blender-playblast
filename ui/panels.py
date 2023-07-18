@@ -5,10 +5,13 @@ import bpy
 from bpy.types import Panel
 
 
+from ..utils import funcs
+
+
 class PlayblastPanel:
     """Playblast Panel"""
     
-    bl_space_type = "IMAGE_EDITOR"
+    bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "Playblast"
 
@@ -54,20 +57,30 @@ class IMAGE_PT_PlayblastRenderSettings(Panel, PlayblastPanel):
         
         col = as_col.column()
         col.label(text="Playblast Render Path")
-        col.prop(properties, "render_loc", text="")
+        col.prop(properties, "render_folder")
+        col.prop(properties, "render_filename")
         
         if properties.override_filepath == False:
             col.enabled = False
         
         col = as_col.column()
         col.prop(properties, "override_filepath")
+        col.separator()
+
+        col = layout.column()
+        row = col.row()
+        row.operator("playblast.render_playblast")
+        row.operator("playblast.clear_playblast")
+        
 
 
-class IMAGE_PT_PlayblastControls(Panel, PlayblastPanel):
+class IMAGE_PT_PlayblastControls(Panel):
     """Playblast Controls Panel"""
     
     bl_label = "Playblast Controls"
-    bl_parent_id = "IMAGE_PT_PlayblastMainPanel"
+    bl_space_type = "IMAGE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "Playblast"
     
     def draw(self, context):
         layout = self.layout
@@ -77,6 +90,9 @@ class IMAGE_PT_PlayblastControls(Panel, PlayblastPanel):
         col = layout.column()
         col.label(text="Frame in View")
         col.prop(properties, "curr_frame")
+
+        if properties.playblast_exists == False:
+            col.enabled = False
 
 
 classes = [

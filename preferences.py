@@ -11,7 +11,12 @@ class PlayblastPreferences(bpy.types.AddonPreferences):
     
     def draw(self, context):
         layout = self.layout
+        scene = context.scene
+        properties = scene.playblast
+
         layout.label(text="Playblast Add-On Preferences")
+        layout.prop(properties, "render_folder")
+        layout.prop(properties, "render_filename")
 
 
 def register_classes():

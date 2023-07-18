@@ -6,6 +6,7 @@ import bpy
 
 from . import funcs
 from . import props
+from . import render
 
 
 def register_modules():
