@@ -6,6 +6,9 @@ from bpy.props import (BoolProperty, IntProperty,
                        PointerProperty, StringProperty)
 
 
+from ..utils import funcs, render
+
+
 class PlayblastProperties(bpy.types.PropertyGroup):
     """Playblast Add-On Properties"""
     
@@ -20,6 +23,12 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         name="Playblast Exists",
         description="Status that indicates if playblast exists",
         default=False
+    )
+    
+    render_viewport: BoolProperty(
+        name="Render Using Viewport",
+        description="Render the playblast using viewport settings, if not then use scene settings",
+        default=True
     )
     
     # Integers
@@ -57,7 +66,10 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         description="Playblast's current frame",
         default=1,
         subtype="UNSIGNED",
-        min=1
+        override={"LIBRARY_OVERRIDABLE"},
+        get=lambda self: self.get_curr_frame(),
+        set=lambda self, value: self.set_curr_frame(value),
+        update=lambda self, context: self.show_image(context)
     )
     
     # Strings
@@ -78,6 +90,19 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         description="Playblast viewing window name",
         default="temp"
     )
+    
+    def get_curr_frame(self):
+        return self.get('curr_frame', 1)
+    
+    def set_curr_frame(self, value):
+        if self.frame_start <= value <= self.frame_end:
+            self['curr_frame'] = value
+    
+    def show_image(self, context):
+        path = funcs.path_setup(self.render_folder, self.render_filename)
+
+        render.update_image(self.curr_frame, path)
+
 
 
 def register_classes():

@@ -5,7 +5,10 @@ import bpy
 
 
 def create_window() -> None:
-    bpy.ops.wm.window_new()
+    wm = bpy.context.window_manager
+    
+    if len(wm.windows.items()) == 1:
+        bpy.ops.wm.window_new()
 
 
 def temp_window_setup() -> None:
@@ -29,16 +32,16 @@ def temp_window_setup() -> None:
 def get_space():
     area_name = bpy.context.scene.playblast.window_name
     area = bpy.data.screens[area_name].areas[0]
-    space = area.spaces[0]
+    space = area.spaces.active
     
     return space
 
 
-def viewport_render(frame: int, filepath: str) -> None:
+def viewport_render(frame: int, filepath: str, view_context: bool = True) -> None:
     render_path = filepath.replace("####", str(frame).zfill(4))
     
     bpy.context.scene.render.filepath = render_path
-    bpy.ops.render.opengl(write_still=True, view_context=True)
+    bpy.ops.render.opengl(write_still=True, view_context=view_context)
 
 
 def update_image(frame: int, filepath: str) -> None:
@@ -47,18 +50,13 @@ def update_image(frame: int, filepath: str) -> None:
     if bpy.data.images.get('Playblast'):
         bpy.data.images.remove(bpy.data.images["Playblast"])
     
-    read_path = filepath.replace("####", str(frame).zfill(4)) + ".png"
-    
-    bpy.ops.image.reload()
-    bpy.data.images.load(read_path)
-    
-    space.image = bpy.data.images[read_path.split("/")[-1]]
-    space.image.name = "Playblast"
+    frame_str = str(frame).zfill(4)
+    read_path = filepath.replace("####", frame_str) + ".png"
 
+    try:
+        image = bpy.data.images.load(read_path)
+        image.name = "Playblast"
 
-def create_playblast(frame_start: int, frame_end: int,
-                     filepath: str) -> None:
-    for frame in range(frame_start, frame_end + 1):
-        bpy.context.scene.frame_set(frame)
-        viewport_render(frame, filepath)
-        update_image(frame, filepath)
+        space.image = image
+    except RuntimeError:
+        print(f"There is no such frame: {frame_str}")

@@ -68,10 +68,13 @@ class IMAGE_PT_PlayblastRenderSettings(Panel, PlayblastPanel):
         col.separator()
 
         col = layout.column()
+        col.prop(properties, "render_viewport")
+        col.separator()
+        
         row = col.row()
         row.operator("playblast.render_playblast")
         row.operator("playblast.clear_playblast")
-        
+        row.separator()
 
 
 class IMAGE_PT_PlayblastControls(Panel):
@@ -90,6 +93,14 @@ class IMAGE_PT_PlayblastControls(Panel):
         col = layout.column()
         col.label(text="Frame in View")
         col.prop(properties, "curr_frame")
+        col.separator()
+        
+        col = layout.column()
+        grid = col.grid_flow(row_major=True, columns=4, even_columns=True)
+        grid.operator("playblast.to_first", text="", icon="REW")
+        # grid.operator("playblast.pause", text="", icon="PAUSE")
+        # grid.operator("playblast.play", text="", icon="PLAY")
+        grid.operator("playblast.to_last", text="", icon="FF")
 
         if properties.playblast_exists == False:
             col.enabled = False
