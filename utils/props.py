@@ -24,13 +24,7 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         description="Status that indicates if playblast exists",
         default=False
     )
-    
-    render_viewport: BoolProperty(
-        name="Render Using Viewport",
-        description="Render the playblast using viewport settings, if not then use scene settings",
-        default=True
-    )
-    
+        
     # Integers
     res_x: IntProperty(
         name="Width",
@@ -85,6 +79,18 @@ class PlayblastProperties(bpy.types.PropertyGroup):
         default="frame"
     )
     
+    override_folder: StringProperty(
+        name="Override Folder Name",
+        description="Playblast output folder",
+        default="",
+    )
+
+    override_filename: StringProperty(
+        name="Override File Name",
+        description="Playblast output image filename",
+        default="",
+    )
+
     window_name: StringProperty(
         name="Playblast Window Name",
         description="Playblast viewing window name",
@@ -100,6 +106,10 @@ class PlayblastProperties(bpy.types.PropertyGroup):
     
     def show_image(self, context):
         path = funcs.path_setup(self.render_folder, self.render_filename)
+
+        if self.override_filename == True:
+            path = funcs.path_setup(self.override_folder, 
+                                    self.override_filename)
 
         render.update_image(self.curr_frame, path)
 

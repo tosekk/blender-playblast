@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 import os
+import shutil
 
 
 import bpy
@@ -29,13 +30,6 @@ def clear_playblast_data(folder: str) -> None:
     pb_dir_path = os.path.join(curr_dir, folder)
 
     try:
-        items = os.listdir(pb_dir_path)
-
-        for item in items:
-            item_path = os.path.join(pb_dir_path, item)
-
-            if os.path.isfile(item_path):
-                os.remove(item_path)
-
+        shutil.rmtree(pb_dir_path)
     except Exception as e:
         print(f"Error while clearing the folder: {e}")

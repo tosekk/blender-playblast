@@ -57,18 +57,14 @@ class IMAGE_PT_PlayblastRenderSettings(Panel, PlayblastPanel):
         
         col = as_col.column()
         col.label(text="Playblast Render Path")
-        col.prop(properties, "render_folder")
-        col.prop(properties, "render_filename")
+        col.prop(properties, "override_folder", text="Folder Name")
+        col.prop(properties, "override_filename", text="Filename")
         
         if properties.override_filepath == False:
             col.enabled = False
         
         col = as_col.column()
         col.prop(properties, "override_filepath")
-        col.separator()
-
-        col = layout.column()
-        col.prop(properties, "render_viewport")
         col.separator()
         
         row = col.row()

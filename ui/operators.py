@@ -26,8 +26,13 @@ class IMAGE_OT_PlayblastRender(Operator):
         if event.type == 'TIMER':
             scene = context.scene
             properties = scene.playblast
+
             path = funcs.path_setup(properties.render_folder,
                                     properties.render_filename)
+            
+            if properties.override_filepath == True:
+                path = funcs.path_setup(properties.override_folder,
+                                        properties.override_filename)
             
             curr_progress = int(((self.curr_frame - properties.frame_start) / 
                                 (properties.frame_end - properties.frame_start)) * 100)
@@ -36,9 +41,10 @@ class IMAGE_OT_PlayblastRender(Operator):
             
             if self.curr_frame <= properties.frame_end:
                 context.scene.frame_set(self.curr_frame)
-                render.viewport_render(self.curr_frame, path, 
-                                       properties.render_viewport)
-                render.update_image(self.curr_frame, path)
+
+                render.viewport_render(self.curr_frame, path)
+
+                bpy.ops.render.opengl(write_still=True, view_context=True)
                 
                 properties.curr_frame = self.curr_frame
                 
@@ -46,17 +52,19 @@ class IMAGE_OT_PlayblastRender(Operator):
                 context.scene.frame_set(self.curr_frame)
             else:
                 self.cancel(context)
+                
                 properties.playblast_exists = True
                 properties.curr_frame = 1
+
+                render.create_window()
+                render.temp_window_setup()
+                render.update_image(self.curr_frame, path)
                 
                 return {'FINISHED'}
         
         return {'PASS_THROUGH'}
     
     def execute(self, context):
-        render.create_window()
-        render.temp_window_setup()
-        
         wm = context.window_manager
         self._timer = wm.event_timer_add(0.1, window=context.window)
         wm.modal_handler_add(self)
@@ -85,7 +93,11 @@ class IMAGE_OT_PlaybastClear(Operator):
         scene = context.scene
         properties = scene.playblast
 
-        funcs.clear_playblast_data(properties.render_folder)
+        folder_to_delete = properties.render_folder \
+            if properties.override_filepath == False \
+                else properties.override_folder
+        
+        funcs.clear_playblast_data(folder_to_delete)
 
         return {'FINISHED'}
 

@@ -37,15 +37,23 @@ def get_space():
     return space
 
 
-def viewport_render(frame: int, filepath: str, view_context: bool = True) -> None:
+def viewport_render(frame: int, filepath: str) -> None:
     render_path = filepath.replace("####", str(frame).zfill(4))
     
-    bpy.context.scene.render.filepath = render_path
-    bpy.ops.render.opengl(write_still=True, view_context=view_context)
+    scene = bpy.context.scene
+    properties = scene.playblast
+    
+    scene.render.filepath = render_path
+    scene.render.image_settings.file_format = "PNG"
+    
+    scene.render.resolution_x = properties.res_x
+    scene.render.resolution_y = properties.res_y
 
 
 def update_image(frame: int, filepath: str) -> None:
     space = get_space()
+
+    bpy.ops.image.reload()
     
     if bpy.data.images.get('Playblast'):
         bpy.data.images.remove(bpy.data.images["Playblast"])
