@@ -202,7 +202,7 @@ class IMAGE_OT_PlayblastLast(Operator):
 classes = [
     IMAGE_OT_PlayblastRender,
     IMAGE_OT_PlaybastClear,
-    IMAGE_OT_PlayblastPlayPause,
+    # IMAGE_OT_PlayblastPlayPause,
     # IMAGE_OT_PlayblastPlay,
     # IMAGE_OT_PlayblastPause,
     IMAGE_OT_PlayblastFirst,

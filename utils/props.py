@@ -6,7 +6,7 @@ from bpy.props import (BoolProperty, IntProperty,
                        PointerProperty, StringProperty)
 
 
-from ..utils import funcs, render
+from . import funcs, render
 
 
 class PlayblastProperties(bpy.types.PropertyGroup):
