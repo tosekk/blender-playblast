@@ -1,5 +1,5 @@
-# Copyright 2023 Zhandos Kadyrkulov
-# SPDX-License-Identifier: MIT
+# This software is dedicated to the public domain under the Creative Commons Zero (CC0) license.
+# SPDX-License-Identifier: CC0-1.0
 
 import bpy
 from bpy.props import (BoolProperty, IntProperty, 
