@@ -1,5 +1,5 @@
 # Copyright 2023 Zhandos Kadyrkulov
-# SPDX-License-Identifier: GNU GPLv3
+# SPDX-License-Identifier: MIT
 
 import bpy
 from bpy.props import (BoolProperty, IntProperty, 

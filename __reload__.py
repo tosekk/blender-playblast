@@ -1,5 +1,5 @@
 # Copyright 2023 Zhandos Kadyrkulov
-# SPDX-License-Identifier: GNU GPLv3
+# SPDX-License-Identifier: MIT
 
 import sys
 from importlib import reload
